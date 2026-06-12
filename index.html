@@ -196,13 +196,23 @@
             text-decoration: underline;
         }
 
-        .inv-input {
-            width: 38px;
-            padding: 4px 2px;
-            text-align: center;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-        }
+		.inv-input {
+			width: 38px;
+			padding: 4px 2px;
+			text-align: center;
+			border: 1px solid #cbd5e1;
+			border-radius: 4px;
+		}
+
+		/* === 貼在這邊 === */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+		input[type="number"] {
+			-moz-appearance: textfield;
+		}
 
         /* 地圖滾動保護層：確保小手機上可以左右滑動完整大地圖，不被擠壓 */
         .map-wrapper {
