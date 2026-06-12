@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蛋仔派對農場規劃器 V2</title>
+    <title>蛋仔派對瘋狂農場規劃器</title>
     <style>
         :root {
             --bg-main: #f0f4f8;
             --bg-container: #ffffff;
             --text-main: #2d3748;
             --border-color: #cbd5e1;
-            /* 調整格線顏色與樣式，更貼近圖片的灰藍質感 */
             --grid-line: #e2e8f0;
             --navy-dark: #334155; 
             --accent-blue: #475569;
@@ -20,79 +19,96 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "Microsoft JhengHei", sans-serif;
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        h1 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #1e3a8a;
+        .header-container {
+            width: 100%;
+            max-width: 1750px;
             text-align: center;
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 20px;
+            color: #1e3a8a;
+            margin-bottom: 10px;
         }
 
-        /* 頂部控制列 */
         .controls {
             background: var(--bg-container);
-            padding: 15px 25px;
+            padding: 12px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            width: 100%;
-            max-width: 1100px;
         }
 
         .control-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .type-btn {
+            padding: 4px 10px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .type-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .type-btn[data-type="巨"].active {
+            background-color: #ef4444;
+            border-color: #ef4444;
+        }
+        .type-btn[data-type="流"].active {
+            background: linear-gradient(135deg, #00b0f0, #a855f7, #f97316);
+            color: white;
+            border-color: #a855f7;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .divider {
             width: 1px;
-            height: 24px;
+            height: 20px;
             background-color: #cbd5e1;
-            margin: 0 5px;
-        }
-
-        label {
-            font-weight: bold;
-            font-size: 14px;
         }
 
         select, input[type="number"] {
-            padding: 8px 12px;
+            padding: 6px 8px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
             outline: none;
-            background-color: #fff;
-        }
-
-        select:focus, input[type="number"]:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 6px 12px;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
@@ -100,67 +116,142 @@
             align-items: center;
             gap: 4px;
         }
-
         .btn-primary { background-color: #3b82f6; color: white; }
-        .btn-primary:hover { background-color: #2563eb; }
         .btn-success { background-color: #10b981; color: white; }
-        .btn-success:hover { background-color: #059669; }
         .btn-secondary { background-color: #64748b; color: white; }
-        .btn-secondary:hover { background-color: #475569; }
         .btn-danger { background-color: #ef4444; color: white; }
-        .btn-danger:hover { background-color: #dc2626; }
 
-        /* 大地圖版面佈局 - 六區排列組合 */
-        .map-container {
-            background: var(--bg-container);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        /* === 核心關鍵：多端響應式版面佈局 === */
+        .main-layout {
             display: grid;
-            grid-template-columns: auto auto auto;
-            grid-template-rows: auto auto auto;
-            gap: 5px;
+            grid-template-columns: 1fr; /* 預設手機版：單欄一條龍排列 */
+            gap: 15px;
+            width: 100%;
+            max-width: 1750px;
+            align-items: start;
+        }
+
+        /* 當螢幕寬度大於 1200px 時，自動切換為寬敞的電腦三欄版面 */
+        @media (min-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 360px 1fr 300px;
+            }
+        }
+
+        /* 各區塊容器基礎樣式 */
+        .sidebar-left, .sidebar-right, .map-wrapper {
+            background: var(--bg-container);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-left {
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .inventory-table, .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .inventory-table th, .stats-table th {
+            background: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 6px 2px;
+            border-bottom: 2px solid #e2e8f0;
+            color: #64748b;
+        }
+        .inventory-table td, .stats-table td {
+            padding: 6px 2px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+        }
+        .cat-row {
+            background: #f1f5f9;
+            font-weight: bold;
+            text-align: left !important;
+            padding-left: 8px !important;
+            color: #475569;
+        }
+
+        .clickable-crop {
+            cursor: pointer;
+        }
+        .clickable-crop:hover {
+            background-color: #eff6ff;
+            text-decoration: underline;
+        }
+
+        .inv-input {
+            width: 38px;
+            padding: 4px 2px;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* 地圖滾動保護層：確保小手機上可以左右滑動完整大地圖，不被擠壓 */
+        .map-wrapper {
+            overflow-x: auto;
+            display: flex;
+            justify-content: flex-start;
+        }
+        @media (min-width: 1200px) {
+            .map-wrapper {
+                justify-content: center;
+            }
+        }
+
+        .map-container {
+            display: grid;
+            grid-template-columns: auto auto;
             position: relative;
             user-select: none;
             width: fit-content;
+            padding: 10px;
         }
 
-        /* 根據附圖重新精準定義的十字分界線 */
-        .cross-h {
-            grid-column: 1 / -1;
-            height: 2px;
-            background-color: #94a3b8;
-            align-self: center;
-            margin: 15px 0;
-            opacity: 0.7;
+        /* 十字中央界線 */
+        .map-container::before {
+            content: ""; position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 2px; background-color: #94a3b8; opacity: 0.6; transform: translateX(-50%); z-index: 1; pointer-events: none;
+        }
+        .map-container::after {
+            content: ""; position: absolute; top: 50%; left: 0; right: 0;
+            height: 2px; background-color: #94a3b8; opacity: 0.6; transform: translateY(-50%); z-index: 1; pointer-events: none;
         }
 
-        .cross-v {
-            grid-row: 1 / -1;
-            width: 2px;
-            background-color: #94a3b8;
-            justify-self: center;
-            margin: 0 15px;
-            opacity: 0.7;
-        }
+        .zone-left { margin-right: 12px; }
+        .zone-right { margin-left: 12px; }
+        .zone-top { margin-bottom: 12px; }
+        .zone-bottom { margin-top: 12px; }
 
-        /* 8x8 獨立區塊 */
-        .zone {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 配合附圖：統一乾淨白底加深灰藍細外框 */
+        .zone { display: flex; flex-direction: column; }
         .grid-8x8 {
             display: grid;
-            grid-template-columns: repeat(8, 48px);
-            grid-template-rows: repeat(8, 48px);
+            grid-template-columns: repeat(8, 40px);
+            grid-template-rows: repeat(8, 40px);
             border: 2px solid var(--accent-blue);
             background: #ffffff;
         }
 
-        /* 單一格子：全面統一成乾淨淡色格線 */
         .cell {
+            width: 39px;
+            height: 39px;
             border: 1px solid var(--grid-line);
             display: flex;
             flex-direction: column;
@@ -171,292 +262,170 @@
             cursor: pointer;
             position: relative;
             background-color: #ffffff;
-            transition: background-color 0.1s;
         }
+        .cell:hover { outline: 2px solid #3b82f6; z-index: 10; }
+        .cell .crop-text { font-size: 11px; line-height: 1.1; text-align: center; z-index: 2; }
+        .cell .level-text { font-size: 9px; font-weight: normal; opacity: 0.9; z-index: 2; }
 
-        .cell:hover {
-            outline: 2px solid #3b82f6;
-            z-index: 10;
-        }
-
-        /* 水果標籤文字與微透明等級樣式 */
-        .cell .crop-text {
-            font-size: 14px;
-            line-height: 1.2;
-        }
-        
-        .cell .level-text {
-            font-size: 10px;
-            margin-top: 2px;
-            font-weight: normal;
-        }
-
-        /* 座標標籤樣式 - 與附圖完全一致的深灰藍文字 */
         .labels-row {
             display: grid;
-            grid-template-columns: repeat(8, 48px);
-            text-align: center;
-            height: 25px;
-            align-items: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--accent-blue);
+            grid-template-columns: repeat(8, 40px);
+            text-align: center; height: 20px; align-items: center;
+            font-size: 12px; font-weight: bold; color: var(--accent-blue);
         }
-
         .labels-col {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            width: 25px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--accent-blue);
-            height: 384px; /* 48px * 8 */
+            display: flex; flex-direction: column; justify-content: space-around;
+            width: 20px; text-align: center; font-size: 12px; font-weight: bold; color: var(--accent-blue); height: 320px;
+        }
+        .zone-body { display: flex; align-items: center; }
+        .hidden-label { visibility: hidden; }
+
+        /* 🎨 顏色樣式 */
+        .bg-cat-至臻 { background-color: #f5f3ff !important; }
+        .bg-cat-黃金 { background-color: #fff7ed !important; }
+        .bg-cat-紫色 { background-color: #faf5ff !important; }
+        .bg-cat-藍色 { background-color: #f0fdfa !important; }
+        .bg-cat-綠色 { background-color: #f0fdf4 !important; }
+        .bg-cat-灰色 { background-color: #f8fafc !important; }
+
+        .bg-style-流光 { 
+            background: linear-gradient(135deg, #ccf6ff 0%, #e3d5ff 40%, #ffcbe4 70%, #ffe9c5 100%) !important; 
+            box-shadow: inset 0 0 4px rgba(168, 85, 247, 0.2);
         }
 
-        .zone-body {
-            display: flex;
-            align-items: center;
+        .t-至臻 { color: #1d4ed8; }
+        .t-黃金 { color: #c2410c; }
+        .t-紫色 { color: #6b21a8; }
+        .t-藍色 { color: rgb(0, 176, 240) !important; }
+        .t-綠色 { color: #15803d; }
+        .t-灰色 { color: rgb(127, 127, 127) !important; }
+        .t-style-巨大 { color: #ef4444 !important; }
+
+        /* 流光文字黑底白邊高對比優化 */
+        .t-style-流光 .crop-text,
+        .t-style-流光 .level-text {
+            color: #1e293b !important;
+            font-weight: 900 !important;
+            text-shadow: 
+                -1.5px -1.5px 0 #ffffff, 1.5px -1.5px 0 #ffffff,
+                -1.5px  1.5px 0 #ffffff, 1.5px  1.5px 0 #ffffff,
+                -2px  0px 0 #ffffff, 2px  0px 0 #ffffff,
+                0px -2px 0 #ffffff, 0px  2px 0 #ffffff,
+                0px  0px 4px rgba(255,255,255,1);
         }
 
-        /* 26種作物顏色：只改變格子內文字顏色與微量淡背景，背景統一維持白底乾淨質感 */
-        .c-none { background-color: #ffffff; color: #000; }
-
-        /* 至臻系列 */
-        .c-菊 { background-color: #f0f7ff; color: #1d4ed8; }
-        .c-葵 { background-color: #fffaf0; color: #ea580c; }
-        .c-松 { background-color: #fffbeb; color: #b45309; }
-        .c-象 { background-color: #f0fdf4; color: #166534; }
-        .c-菇 { background-color: #faf5ff; color: #6b21a8; }
-        .c-蟠 { background-color: #fdf4ff; color: #9d174d; }
-        .c-葡 { background-color: #fdf2f8; color: #be185d; }
-        .c-椒 { background-color: #fef2f2; color: #991b1b; }
-        .c-彼 { background-color: #fff1f2; color: #9f1239; }
-
-        /* 黃金系列 */
-        .c-莓 { background-color: #fff1f2; color: #e11d48; }
-        .c-梿 { background-color: #fff7ed; color: #c2410c; }
-        .c-荔 { background-color: #f0fdf4; color: #15803d; }
-        .c-異 { background-color: #fefce8; color: #854d0e; }
-
-        /* 紫色系列 */
-        .c-蕉 { background-color: #fdfbec; color: #a16207; }
-        .c-蘋 { background-color: #fff5f5; color: #c53030; }
-        .c-石 { background-color: #faf5ff; color: #553c9a; }
-        .c-椰 { background-color: #f0fdfa; color: #0f766e; }
-        .c-南 { background-color: #fff9db; color: #e67e22; }
-        .c-櫻 { background-color: #fff0f6; color: #9d174d; }
-
-        /* 藍色系列 */
-        .c-玉 { background-color: #fefce8; color: #713f12; }
-        .c-西 { background-color: #f0fdf4; color: #166534; }
-        .c-牽 { background-color: #f0f9ff; color: #0369a1; }
-        .c-梨 { background-color: #f8fafc; color: #334155; }
-        .c-橘 { background-color: #fff7ed; color: #9a3412; }
-        .c-棉 { background-color: #f1f5f9; color: #475569; }
-        .c-菜 { background-color: #f0fdf4; color: #14532d; }
-
-        /* 說明面板 */
-        .legend-panel {
-            background: var(--bg-container);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-top: 25px;
-            width: 100%;
-            max-width: 1100px;
-        }
-        .legend-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1e3a8a;
-            font-size: 15px;
-        }
-        .legend-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            background: #fff;
-        }
-        .legend-item:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-        .color-box {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .footer-text {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #64748b;
-            text-align: center;
-            max-width: 800px;
-            line-height: 1.6;
-        }
+        #saveStatus { font-size: 12px; color: #059669; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h1>蛋仔派對農場開放式規劃器 (背景優化與雲端防丟版)</h1>
-
-    <!-- 頂部刷子工具與存檔面板 -->
-    <div class="controls">
-        <div class="control-group">
-            <label for="cropSelect">目前作物:</label>
-            <select id="cropSelect">
-                <option value="">🚫 清除/空白</option>
-                <optgroup label="至臻">
-                    <option value="菊">大王菊 (菊)</option>
-                    <option value="葵">向日葵 (葵)</option>
-                    <option value="松">松樹 (松)</option>
-                    <option value="象">仙人掌象 (象)</option>
-                    <option value="菇">驚奇菇 (菇)</option>
-                    <option value="蟠">蟠桃 (蟠)</option>
-                    <option value="葡">葡萄 (葡)</option>
-                    <option value="椒">朝天椒 (椒)</option>
-                    <option value="彼">彼岸花 (彼)</option>
-                </optgroup>
-                <optgroup label="黃金">
-                    <option value="莓">草莓 (莓)</option>
-                    <option value="梿">榴槤 (梿)</option>
-                    <option value="荔">荔枝 (荔)</option>
-                    <option value="異">奇異果 (異)</option>
-                </optgroup>
-                <optgroup label="紫色">
-                    <option value="蕉">香蕉 (蕉)</option>
-                    <option value="蘋">蘋果 (蘋)</option>
-                    <option value="石">石榴 (石)</option>
-                    <option value="椰">椰子 (椰)</option>
-                    <option value="南">南瓜 (南)</option>
-                    <option value="櫻">櫻桃 (櫻)</option>
-                </optgroup>
-                <optgroup label="藍色">
-                    <option value="玉">玉米 (玉)</option>
-                    <option value="西">西瓜 (西)</option>
-                    <option value="牽">牽牛花 (牽)</option>
-                    <option value="梨">梨作物 (梨)</option>
-                    <option value="橘">橘子 (橘)</option>
-                    <option value="棉">棉花 (棉)</option>
-                    <option value="菜">白菜 (菜)</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label for="levelInput">等級/數量:</label>
-            <input type="number" id="levelInput" min="1" max="9" value="1" style="width: 55px;">
-        </div>
-
-        <button class="btn btn-primary" id="dragModeBtn">滑鼠連續塗鴉: 關閉</button>
-        
-        <div class="divider"></div>
-
-        <!-- 存檔與安全性控制項 -->
-        <button class="btn btn-success" id="saveBtn" title="手動將資料同步進瀏覽器保險箱">💾 立即保存檔案</button>
-        <span id="saveStatus" style="font-size: 12px; color: #059669; font-weight: bold; min-width: 120px;">已自動載入進度</span>
-        
-        <div class="divider"></div>
-        <button class="btn btn-secondary" id="exportBtn" title="導出成文字檔，可在其他電腦載入">📤 備份導出</button>
-        <button class="btn btn-secondary" id="importBtn" title="導入之前的文字檔備份">📥 還原載入</button>
-        <button class="btn btn-danger" id="clearAllBtn">🧹 全清</button>
-    </div>
-
-    <!-- 6區大矩陣 -->
-    <div class="map-container" id="mapMain">
-        <!-- 上左區 (Zone 1) -->
-        <div class="zone" id="z1">
-            <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
-            <div class="zone-body">
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                <div class="grid-8x8" data-zone="1"></div>
+        <h1>蛋仔派對瘋狂農場規劃器</h1>
+        <div class="controls">
+            <div class="control-group">
+                <span>選定作物:</span>
+                <select id="cropSelect"><option value="">🚫 清除/空白</option></select>
             </div>
-        </div>
-
-        <div class="cross-v"></div>
-
-        <!-- 上右區 (Zone 2) -->
-        <div class="zone" id="z2">
-            <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-            <div class="zone-body">
-                <div class="grid-8x8" data-zone="2"></div>
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+            <div class="control-group">
+                <span>型態:</span>
+                <button class="type-btn active" data-type="普">普</button>
+                <button class="type-btn" data-type="幻">幻</button>
+                <button class="type-btn" data-type="異">異</button>
+                <button class="type-btn" data-type="巨" style="color:#ef4444;">巨</button>
+                <button class="type-btn" data-type="流" style="color:#a855f7;">流</button>
             </div>
-        </div>
-
-        <!-- 中間線 -->
-        <div class="cross-h"></div>
-        <div></div>
-        <div class="cross-h"></div>
-
-        <!-- 中左區 (Zone 3) -->
-        <div class="zone" id="z3">
-            <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
-            <div class="zone-body">
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                <div class="grid-8x8" data-zone="3"></div>
+            <div class="control-group">
+                <label for="levelInput">級數:</label>
+                <input type="number" id="levelInput" min="1" max="9" value="1" style="width: 45px;">
             </div>
-        </div>
-
-        <div class="cross-v"></div>
-
-        <!-- 中右區 (Zone 4) -->
-        <div class="zone" id="z4">
-            <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-            <div class="zone-body">
-                <div class="grid-8x8" data-zone="4"></div>
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-            </div>
-        </div>
-
-        <!-- 中間線 -->
-        <div class="cross-h"></div>
-        <div></div>
-        <div class="cross-h"></div>
-
-        <!-- 下左區 (Zone 5) -->
-        <div class="zone" id="z5">
-            <div class="zone-body">
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                <div class="grid-8x8" data-zone="5"></div>
-            </div>
-            <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
-        </div>
-
-        <div class="cross-v"></div>
-
-        <!-- 下右區 (Zone 6) -->
-        <div class="zone" id="z6">
-            <div class="zone-body">
-                <div class="grid-8x8" data-zone="6"></div>
-                <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-            </div>
-            <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+            <button class="btn btn-primary" id="dragModeBtn">連續塗鴉: 關閉</button>
+            <button class="btn btn-success" id="saveBtn">💾 保存</button>
+            <button class="btn btn-secondary" id="exportBtn">📤 備份</button>
+            <button class="btn btn-secondary" id="importBtn">📥 還原</button>
+            <button class="btn btn-danger" id="clearAllBtn">🧹 全清</button>
+            <span id="saveStatus">● 系統防丟護航中</span>
         </div>
     </div>
 
-    <!-- 底部調色盤 -->
-    <div class="legend-panel">
-        <div class="legend-title">作物調色盤快速切換：</div>
-        <div class="legend-grid" id="paletteGrid"></div>
-    </div>
+    <div class="main-layout">
+        <div class="sidebar-left">
+            <div class="panel-title">🎒 種子背包庫存 (點擊快選)</div>
+            <table class="inventory-table">
+                <thead><tr><th>作物名稱</th><th>簡</th><th>普</th><th>幻</th><th>異</th><th>巨</th><th>流</th></tr></thead>
+                <tbody id="inventoryBody"></tbody>
+            </table>
+        </div>
 
-    <div class="footer-text">
+        <div class="map-wrapper">
+            <div class="map-container" id="mapMain">
+                <div class="zone zone-left zone-top" id="z1">
+                    <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
+                    <div class="zone-body">
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                        <div class="grid-8x8" data-zone="1"></div>
+                    </div>
+                </div>
+                <div class="zone zone-right zone-top" id="z2">
+                    <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    <div class="zone-body">
+                        <div class="grid-8x8" data-zone="2"></div>
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    </div>
+                </div>
+                <div class="zone zone-left zone-bottom" id="z3">
+                    <div class="labels-row hidden-label"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
+                    <div class="zone-body">
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                        <div class="grid-8x8" data-zone="3"></div>
+                    </div>
+                </div>
+                <div class="zone zone-right zone-bottom" id="z4">
+                    <div class="labels-row hidden-label"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    <div class="zone-body">
+                        <div class="grid-8x8" data-zone="4"></div>
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    </div>
+                </div>
+                <div class="zone zone-left zone-top" id="z5">
+                    <div class="zone-body">
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                        <div class="grid-8x8" data-zone="5"></div>
+                    </div>
+                    <div class="labels-row hidden-label"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
+                </div>
+                <div class="zone zone-right zone-top" id="z6">
+                    <div class="zone-body">
+                        <div class="grid-8x8" data-zone="6"></div>
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    </div>
+                    <div class="labels-row hidden-label"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                </div>
+                <div class="zone zone-left zone-bottom" id="z7">
+                    <div class="zone-body">
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                        <div class="grid-8x8" data-zone="7"></div>
+                    </div>
+                    <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
+                </div>
+                <div class="zone zone-right zone-bottom" id="z8">
+                    <div class="zone-body">
+                        <div class="grid-8x8" data-zone="8"></div>
+                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                    </div>
+                    <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
+                </div>
+            </div>
+        </div>
 
+        <div class="sidebar-right">
+            <div class="panel-title">📊 田間即時栽種統計</div>
+            <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px;">
+                目前部署總數: <span id="totalPlantedCount" style="color:#1e3a8a; font-size:16px;">0</span> 顆
+            </div>
+            <table class="stats-table">
+                <thead><tr><th>作物</th><th>普</th><th>幻</th><th>異</th><th>巨</th><th>流</th><th>總</th></tr></thead>
+                <tbody id="statsBody"><tr><td colspan="7" style="color:#94a3b8;">暫無耕作數據</td></tr></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -465,48 +434,93 @@
             { name: '松樹', short: '松', cat: '至臻' }, { name: '仙人掌象', short: '象', cat: '至臻' },
             { name: '驚奇菇', short: '菇', cat: '至臻' }, { name: '蟠桃', short: '蟠', cat: '至臻' },
             { name: '葡萄', short: '葡', cat: '至臻' }, { name: '朝天椒', short: '椒', cat: '至臻' },
-            { name: '彼岸花', short: '彼', cat: '至臻' }, { name: '草莓', short: '莓', cat: '黃金' },
+            { name: '彼岸花', short: '彼', cat: '至臻' }, { name: '幻月花', short: '幻', cat: '至臻' },
+            { name: '火龍狗', short: '狗', cat: '至臻' }, { name: '紅包果', short: '紅', cat: '至臻' },
+            { name: '蘆薈', short: '蘆', cat: '至臻' }, { name: '月蟾蜍', short: '蟾', cat: '至臻' },
+            { name: '月兔', short: '兔', cat: '至臻' }, { name: '月影梅', short: '影梅', cat: '至臻' },
+            { name: '星空玫瑰', short: '瑰', cat: '至臻' },
+            { name: '草莓', short: '莓', cat: '黃金' }, { name: '奇異果', short: '異', cat: '黃金' },
             { name: '榴槤', short: '梿', cat: '黃金' }, { name: '荔枝', short: '荔', cat: '黃金' },
-            { name: '奇異果', short: '異', cat: '黃金' }, { name: '香蕉', short: '蕉', cat: '紫色' },
-            { name: '蘋果', short: '蘋', cat: '紫色' }, { name: '石榴', short: '石', cat: '紫色' },
-            { name: '椰子', short: '椰', cat: '紫色' }, { name: '南瓜', short: '南', cat: '紫色' },
-            { name: '櫻桃', short: '櫻', cat: '紫色' }, { name: '玉米', short: '玉', cat: '藍色' },
-            { name: '西瓜', short: '西', cat: '藍色' }, { name: '牽牛花', short: '牽', cat: '藍色' },
-            { name: '梨作物', short: '梨', cat: '藍色' }, { name: '橘子', short: '橘', cat: '藍色' },
-            { name: '棉花', short: '棉', cat: '藍色' }, { name: '白菜', short: '菜', cat: '藍色' }
+            { name: '月核樹', short: '核', cat: '黃金' }, { name: '液光藤', short: '藤', cat: '黃金' },
+            { name: '柚子', short: '柚', cat: '黃金' }, { name: '菠菜', short: '菠', cat: '黃金' },
+            { name: '香蕉', short: '蕉', cat: '紫色' }, { name: '蘋果', short: '蘋', cat: '紫色' },
+            { name: '石榴', short: '石', cat: '紫色' }, { name: '椰子', short: '椰', cat: '紫色' },
+            { name: '南瓜', short: '南', cat: '紫色' }, { name: '櫻桃', short: '櫻', cat: '紫色' },
+            { name: '龍眼', short: '龍', cat: '紫色' }, { name: '柿子', short: '柿', cat: '紫色' },
+            { name: '星葉菜', short: '葉', cat: '紫色' }, { name: '月莓', short: '月莓', cat: '紫色' },
+            { name: '玉米', short: '玉', cat: '藍色' }, { name: '西瓜', short: '西', cat: '藍色' },
+            { name: '牽牛花', short: '牽', cat: '藍色' }, { name: '梨作物', short: '梨', cat: '藍色' },
+            { name: '橘子', short: '橘', cat: '藍色' }, { name: '棉花', short: '棉', cat: '藍色' },
+            { name: '白菜', short: '菜', cat: '藍色' }, { name: '月環果', short: '環', cat: '藍色' },
+            { name: '銀輝苔', short: '苔', cat: '藍色' }, { name: '花生', short: '生', cat: '藍色' },
+            { name: '藍莓', short: '藍莓', cat: '藍色' },
+            { name: '黃瓜', short: '黃', cat: '綠色' }, { name: '竹子', short: '竹', cat: '綠色' },
+            { name: '大豆', short: '豆', cat: '綠色' }, { name: '月燈草', short: '燈', cat: '綠色' },
+            { name: '月番茄', short: '月番', cat: '綠色' },
+            { name: '波斯菊', short: '波', cat: '灰色' }, { name: '番茄', short: '番', cat: '灰色' },
+            { name: '馬鈴薯', short: '薯', cat: '灰色' }, { name: '香菇', short: '菇', cat: '灰色' },
+            { name: '月光草', short: '光', cat: '灰色' }, { name: '灰壤豆', short: '灰', cat: '灰色' }
         ];
 
-        let isDragMode = false;
-        let isMouseDown = false;
-        const STORAGE_KEY = 'eggy_farm_planner_save';
+        let isDragMode = false, isMouseDown = false, currentStyle = '普';
+        const STORAGE_KEY = 'eggy_farm_planner_v5_save';
 
-        // 初始化六個 8x8 格子
+        function initUI() {
+            const cropSelect = document.getElementById('cropSelect');
+            let lastCat = "", groupOpt;
+            cropsData.forEach(c => {
+                if(c.cat !== lastCat) {
+                    lastCat = c.cat; groupOpt = document.createElement('optgroup'); groupOpt.label = c.cat; cropSelect.appendChild(groupOpt);
+                }
+                const opt = document.createElement('option'); opt.value = c.short; opt.textContent = `${c.name} (${c.short})`; groupOpt.appendChild(opt);
+            });
+
+            const invBody = document.getElementById('inventoryBody');
+            invBody.innerHTML = ""; lastCat = "";
+            cropsData.forEach((c) => {
+                if(c.cat !== lastCat) {
+                    lastCat = c.cat;
+                    const catTr = document.createElement('tr'); catTr.innerHTML = `<td colspan="7" class="cat-row">★ ${c.cat}系列</td>`; invBody.appendChild(catTr);
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="text-align:left; padding-left:4px;" class="t-${c.cat} clickable-crop" data-short="${c.short}">${c.name}</td>
+                    <td class="clickable-crop" data-short="${c.short}"><b class="t-${c.cat}">${c.short}</b></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="普" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="幻" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="異" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="巨" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="流" min="0" value="0"></td>
+                `;
+                invBody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.clickable-crop').forEach(element => {
+                element.addEventListener('click', () => {
+                    const shortName = element.getAttribute('data-short'); cropSelect.value = shortName;
+                });
+            });
+            invBody.addEventListener('input', autoSaveData);
+        }
+
+        const typeBtns = document.querySelectorAll('.type-btn');
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                typeBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentStyle = btn.dataset.type;
+            });
+        });
+
         const grids = document.querySelectorAll('.grid-8x8');
         grids.forEach(grid => {
             const zoneNum = grid.getAttribute('data-zone');
-            
             for (let row = 8; row >= 1; row--) {
                 for (let col = 1; col <= 8; col++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell', 'c-none');
-                    
-                    // 紀錄精準內置座標
-                    cell.dataset.zone = zoneNum;
-                    cell.dataset.row = row;
-                    cell.dataset.col = (zoneNum == '2' || zoneNum == '4' || zoneNum == '6') ? (9 - col) : col;
+                    const cell = document.createElement('div'); cell.classList.add('cell');
+                    cell.dataset.zone = zoneNum; cell.dataset.row = row;
+                    cell.dataset.col = (zoneNum == '2' || zoneNum == '4' || zoneNum == '6' || zoneNum == '8') ? (9 - col) : col;
 
-                    // 監聽事件
-                    cell.addEventListener('mousedown', (e) => {
-                        isMouseDown = true;
-                        applyBrush(cell);
-                    });
-
-                    cell.addEventListener('mouseenter', () => {
-                        if (isDragMode && isMouseDown) {
-                            applyBrush(cell);
-                        }
-                    });
-
+                    cell.addEventListener('mousedown', () => { isMouseDown = true; applyBrush(cell); });
+                    cell.addEventListener('mouseenter', () => { if (isDragMode && isMouseDown) applyBrush(cell); });
                     grid.appendChild(cell);
                 }
             }
@@ -515,182 +529,145 @@
         window.addEventListener('mouseup', () => { isMouseDown = false; });
 
         function applyBrush(cell) {
-            const crop = document.getElementById('cropSelect').value;
+            const cropShort = document.getElementById('cropSelect').value;
             let level = document.getElementById('levelInput').value.trim();
+            cell.className = 'cell'; cell.innerHTML = '';
 
-            cropsData.forEach(c => cell.classList.remove(`c-${c.short}`));
-            cell.classList.remove('c-none');
-
-            if (!crop) {
-                cell.classList.add('c-none');
-                cell.innerHTML = '';
+            if (!cropShort) {
+                delete cell.dataset.crop; delete cell.dataset.style; delete cell.dataset.lvl;
             } else {
-                cell.classList.add(`c-${crop}`);
-                if(level) {
-                    cell.innerHTML = `<span class="crop-text">${crop}</span><span class="level-text">${level}</span>`;
+                const cropInfo = cropsData.find(c => c.short === cropShort);
+                if(currentStyle === '流') {
+                    cell.classList.add('bg-style-流光', 't-style-流光');
                 } else {
-                    cell.innerHTML = `<span class="crop-text">${crop}</span>`;
+                    cell.classList.add(`bg-cat-${cropInfo.cat}`);
+                    if(currentStyle === '巨') cell.classList.add('t-style-巨大');
+                    else cell.classList.add(`t-${cropInfo.cat}`);
                 }
+                cell.dataset.crop = cropShort; cell.dataset.style = currentStyle; cell.dataset.lvl = level;
+                let displayStyleLabel = currentStyle === '普' ? '' : currentStyle;
+                cell.innerHTML = `<span class="crop-text">${cropShort}${displayStyleLabel}</span>` + (level ? `<span class="level-text">${level}</span>` : '');
             }
-            // 即時防丟：每次修改自動存檔
-            autoSaveData();
+            calculateStats(); autoSaveData();
         }
 
-        // 連續塗鴉模式
+        function calculateStats() {
+            const cells = document.querySelectorAll('.cell[data-crop]');
+            const statsMap = {}; let total = 0;
+            cells.forEach(cell => {
+                const crop = cell.dataset.crop; const style = cell.dataset.style || '普';
+                if(!crop) return; total++;
+                if(!statsMap[crop]) statsMap[crop] = { name: cropsData.find(c=>c.short===crop)?.name || crop, 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
+                statsMap[crop][style]++;
+            });
+
+            document.getElementById('totalPlantedCount').textContent = total;
+            const statsBody = document.getElementById('statsBody'); statsBody.innerHTML = '';
+            if(total === 0) {
+                statsBody.innerHTML = `<tr><td colspan="7" style="color:#94a3b8;">暫無耕作數據</td></tr>`; return;
+            }
+            for(let key in statsMap) {
+                const item = statsMap[key]; const sum = item.普 + item.幻 + item.異 + item.巨 + item.流;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:bold; color:#1e3a8a;">${item.name}(${key})</td>
+                    <td>${item.普 || '-'}</td><td>${item.幻 || '-'}</td><td>${item.異 || '-'}</td>
+                    <td style="color:#ef4444; font-weight:bold;">${item.巨 || '-'}</td>
+                    <td style="color:#7c3aed; font-weight:bold;">${item.流 || '-'}</td>
+                    <td style="font-weight:bold; background:#f8fafc;">${sum}</td>
+                `;
+                statsBody.appendChild(tr);
+            }
+        }
+
         const dragModeBtn = document.getElementById('dragModeBtn');
         dragModeBtn.addEventListener('click', () => {
             isDragMode = !isDragMode;
-            if (isDragMode) {
-                dragModeBtn.textContent = '滑鼠連續塗鴉: 開啟 ✔';
-                dragModeBtn.style.backgroundColor = '#10b981';
-            } else {
-                dragModeBtn.textContent = '滑鼠連續塗鴉: 關閉';
-                dragModeBtn.style.backgroundColor = '#3b82f6';
-            }
+            if (isDragMode) { dragModeBtn.textContent = '連續塗鴉: 開啟 ✔'; dragModeBtn.style.backgroundColor = '#10b981'; }
+            else { dragModeBtn.textContent = '連續塗鴉: 關閉'; dragModeBtn.style.backgroundColor = '#3b82f6'; }
         });
 
-        // 🧹 全清
         document.getElementById('clearAllBtn').addEventListener('click', () => {
-            if (confirm('確定要清空整張地圖嗎？')) {
+            if (confirm('確定要清空全場的大地圖嗎？')) {
                 document.querySelectorAll('.cell').forEach(cell => {
-                    cropsData.forEach(c => cell.classList.remove(`c-${c.short}`));
-                    cell.className = 'cell c-none';
-                    cell.innerHTML = '';
+                    cell.className = 'cell'; cell.innerHTML = '';
+                    delete cell.dataset.crop; delete cell.dataset.style; delete cell.dataset.lvl;
                 });
-                autoSaveData();
-                showStatus('地圖已清空');
+                calculateStats(); autoSaveData();
             }
         });
 
-        // 快速選取面板
-        const paletteGrid = document.getElementById('paletteGrid');
-        cropsData.forEach(crop => {
-            const item = document.createElement('div');
-            item.className = 'legend-item';
-            const colorBox = document.createElement('div');
-            colorBox.className = `color-box c-${crop.short}`;
-            const label = document.createElement('span');
-            label.textContent = `${crop.name}(${crop.short})`;
-            item.appendChild(colorBox);
-            item.appendChild(label);
-            item.addEventListener('click', () => {
-                document.getElementById('cropSelect').value = crop.short;
-            });
-            paletteGrid.appendChild(item);
-        });
-
-        // ====================== 🔒 存檔核心機制編寫 ======================
-        
         function showStatus(msg) {
-            const statusEl = document.getElementById('saveStatus');
-            statusEl.textContent = msg;
-            setTimeout(() => { statusEl.textContent = '● 自動存檔防護中'; }, 3000);
+            const statusEl = document.getElementById('saveStatus'); statusEl.textContent = msg;
+            setTimeout(() => { statusEl.textContent = '● 系統防丟護航中'; }, 3000);
         }
 
-        // 1. 自動存檔 (打包目前全場狀態)
         function autoSaveData() {
-            const cells = document.querySelectorAll('.cell');
-            const dataState = [];
-            cells.forEach(cell => {
-                // 找出目前的作物 class
-                let currentCrop = "";
-                cropsData.forEach(c => {
-                    if(cell.classList.contains(`c-${c.short}`)) {
-                        currentCrop = c.short;
-                    }
+            const mapState = [];
+            document.querySelectorAll('.cell[data-crop]').forEach(cell => {
+                mapState.push({ z: cell.dataset.zone, r: cell.dataset.row, c: cell.dataset.col, crop: cell.dataset.crop, style: cell.dataset.style, lvl: cell.dataset.lvl });
+            });
+            const invState = [];
+            document.querySelectorAll('.inv-input').forEach(input => {
+                const val = parseInt(input.value) || 0;
+                if(val > 0) invState.push({ short: input.dataset.short, mode: input.dataset.mode, val: val });
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ map: mapState, inventory: invState }));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY); if (!saved) return;
+            try {
+                const totalPackage = JSON.parse(saved);
+                document.querySelectorAll('.cell').forEach(cell => {
+                    cell.className = 'cell'; cell.innerHTML = '';
+                    delete cell.dataset.crop; delete cell.dataset.style; delete cell.dataset.lvl;
                 });
-                
-                const levelTextEl = cell.querySelector('.level-text');
-                const lvl = levelTextEl ? levelTextEl.textContent : "";
-                
-                if(currentCrop) {
-                    dataState.push({
-                        z: cell.dataset.zone,
-                        r: cell.dataset.row,
-                        c: cell.dataset.col,
-                        crop: currentCrop,
-                        lvl: lvl
+                if(totalPackage.map) {
+                    totalPackage.map.forEach(item => {
+                        const cell = document.querySelector(`.cell[data-zone="${item.z}"][data-row="${item.r}"][data-col="${item.c}"]`);
+                        if(cell) {
+                            const cropInfo = cropsData.find(c => c.short === item.crop);
+                            if(cropInfo) {
+                                if(item.style === '流') cell.classList.add('bg-style-流光', 't-style-流光');
+                                else {
+                                    cell.classList.add(`bg-cat-${cropInfo.cat}`);
+                                    if(item.style === '巨') cell.classList.add('t-style-巨大');
+                                    else cell.classList.add(`t-${cropInfo.cat}`);
+                                }
+                            }
+                            cell.dataset.crop = item.crop; cell.dataset.style = item.style; cell.dataset.lvl = item.lvl;
+                            let styleLabel = item.style === '普' ? '' : item.style;
+                            cell.innerHTML = `<span class="crop-text">${item.crop}${styleLabel}</span>` + (item.lvl ? `<span class="level-text">${item.lvl}</span>` : '');
+                        }
                     });
                 }
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataState));
-        }
-
-        // 2. 載入存檔
-        function loadData() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (!saved) {
-                document.getElementById('saveStatus').textContent = '● 首次開啟(無存檔)';
-                return;
-            }
-            try {
-                const dataState = JSON.parse(saved);
-                // 先全部恢復清空狀態
-                document.querySelectorAll('.cell').forEach(cell => {
-                    cropsData.forEach(c => cell.classList.remove(`c-${c.short}`));
-                    cell.className = 'cell c-none';
-                    cell.innerHTML = '';
-                });
-
-                // 依據陣列回填
-                dataState.forEach(item => {
-                    const cell = document.querySelector(`.cell[data-zone="${item.z}"][data-row="${item.r}"][data-col="${item.c}"]`);
-                    if(cell) {
-                        cell.classList.remove('c-none');
-                        cell.classList.add(`c-${item.crop}`);
-                        if(item.lvl) {
-                            cell.innerHTML = `<span class="crop-text">${item.crop}</span><span class="level-text">${item.lvl}</span>`;
-                        } else {
-                            cell.innerHTML = `<span class="crop-text">${item.crop}</span>`;
-                        }
-                    }
-                });
-                document.getElementById('saveStatus').textContent = '● 已自動載入上回進度';
-            } catch(e) {
-                console.error("載入失敗", e);
-            }
-        }
-
-        // 按鈕：手動保存
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            autoSaveData();
-            showStatus('💾 檔案保存成功！');
-        });
-
-        // 按鈕：備份導出 (文字檔格式)
-        document.getElementById('exportBtn').addEventListener('click', () => {
-            autoSaveData();
-            const saved = localStorage.getItem(STORAGE_KEY) || "[]";
-            const blob = new Blob([saved], {type: "text/plain;charset=utf-8"});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `蛋仔農場備份_${new Date().toLocaleDateString().replace(/\//g, '-')}.txt`;
-            a.click();
-            showStatus('📤 備份檔案已導出');
-        });
-
-        // 按鈕：導入載入
-        document.getElementById('importBtn').addEventListener('click', () => {
-            const jsonStr = prompt("請貼上之前導出備份文字檔內的全部內容：");
-            if(jsonStr) {
-                try {
-                    // 驗證是否為合法 JSON
-                    const parsed = JSON.parse(jsonStr);
-                    if(Array.isArray(parsed)) {
-                        localStorage.setItem(STORAGE_KEY, jsonStr);
-                        loadData();
-                        showStatus('📥 備份還原成功！');
-                    } else {
-                        alert("不合法的備份檔案格式！");
-                    }
-                } catch(e) {
-                    alert("讀取失敗，請確認貼上的文字是否完整。");
+                document.querySelectorAll('.inv-input').forEach(input => input.value = 0);
+                if(totalPackage.inventory) {
+                    totalPackage.inventory.forEach(item => {
+                        const input = document.querySelector(`.inv-input[data-short="${item.short}"][data-mode="${item.mode}"]`);
+                        if(input) input.value = item.val;
+                    });
                 }
+                calculateStats();
+            } catch(e) { console.error(e); }
+        }
+
+        document.getElementById('saveBtn').addEventListener('click', () => { autoSaveData(); showStatus('💾 資料保存成功！'); });
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            autoSaveData(); const saved = localStorage.getItem(STORAGE_KEY) || "{}";
+            const blob = new Blob([saved], {type: "text/plain;charset=utf-8"});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = `蛋仔整合農場備份_${new Date().toLocaleDateString().replace(/\//g, '-')}.txt`; a.click();
+        });
+        document.getElementById('importBtn').addEventListener('click', () => {
+            const jsonStr = prompt("請貼上導出的備份文字：");
+            if(jsonStr) {
+                try { JSON.parse(jsonStr); localStorage.setItem(STORAGE_KEY, jsonStr); loadData(); showStatus('📥 還原成功！'); } catch(e) { alert("代碼不完整！"); }
             }
         });
 
-        // 頁面初始化載入
-        window.addEventListener('DOMContentLoaded', loadData);
+        window.addEventListener('DOMContentLoaded', () => { initUI(); loadData(); });
     </script>
 </body>
 </html>
