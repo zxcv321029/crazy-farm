@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蛋仔派對瘋狂農場規劃器 V6.0 旗艦優化版 (至臻17色高對比客製版)</title>
+    <title>蛋仔派對瘋狂農場規劃器 V6.1 修正版 (至臻粉嫩半透明)</title>
     <style>
         :root {
             --bg-main: #f0f4f8;
@@ -260,17 +260,16 @@
         .cell .crop-text { 
             font-size: 11px; 
             font-weight: bold;
-            line-height: 1.1; 
+            line-height: 1.2; 
             text-align: center; 
             z-index: 2; 
             margin-bottom: 1px;
         }
         .cell .level-text { 
             font-size: 10px; 
-            font-weight: 500;
-            line-height: 1;
+            font-weight: bold;
+            line-height: 1.2;
             text-align: center;
-            opacity: 0.9; 
             z-index: 2; 
         }
 
@@ -287,79 +286,50 @@
         .zone-body { display: flex; align-items: center; }
         .hidden-label { visibility: hidden; height: 20px; }
 
-        /* 🎨 其他系列基礎底色 */
+        /* 🎨 基礎常規底色 */
         .bg-cat-黃金 { background-color: #fff7ed !important; }
         .bg-cat-紫色 { background-color: #faf5ff !important; }
         .bg-cat-藍色 { background-color: #f0fdfa !important; }
         .bg-cat-綠色 { background-color: #f0fdf4 !important; }
         .bg-cat-灰色 { background-color: #f8fafc !important; }
 
-        /* 💡 核心變更：至臻系列 17 種作物微深高對比專屬配色 💡 */
-        .bg-crop-大菊 { background-color: #ffe066 !important; } /* 深金黃 */
-        .bg-crop-葵花 { background-color: #ffd000 !important; } /* 太陽黃 */
-        .bg-crop-松樹 { background-color: #31663b !important; color: #ffffff !important; } /* 針葉深綠 */
-        .bg-crop-掌象 { background-color: #4db363 !important; } /* 仙人掌綠 */
-        .bg-crop-奇菇 { background-color: #e67300 !important; color: #ffffff !important; } /* 亮深橘 */
-        .bg-crop-蟠桃 { background-color: #ff9999 !important; } /* 桃紅 */
-        .bg-crop-葡萄 { background-color: #8c1aff !important; color: #ffffff !important; } /* 熟紫 */
-        .bg-crop-天椒 { background-color: #cc0000 !important; color: #ffffff !important; } /* 辣椒深紅 */
-        .bg-crop-彼岸 { background-color: #ff3333 !important; color: #ffffff !important; } /* 彼岸鮮紅 */
-        .bg-crop-幻月 { background-color: #c299ff !important; } /* 奇幻紫羅蘭 */
-        .bg-crop-龍狗 { background-color: #ff66a3 !important; } /* 火龍果深粉 */
-        .bg-crop-紅包 { background-color: #b30000 !important; color: #ffffff !important; } /* 嚴肅紅包紅 */
-        .bg-crop-蘆薈 { background-color: #739900 !important; color: #ffffff !important; } /* 蘆薈深草綠 */
-        .bg-crop-月蟾 { background-color: #8099b3 !important; color: #ffffff !important; } /* 月夜暗藍綠 */
-        .bg-crop-月兔 { background-color: #d9d9d9 !important; } /* 月兔灰白 */
-        .bg-crop-影梅 { background-color: #e6b8cc !important; } /* 暗梅紅 */
-        .bg-crop-星玫 { background-color: #0059b3 !important; color: #ffffff !important; } /* 星空深藍 */
+        /* 💡 核心變更：至臻系列 17 種作物全新的「亮、淺、帶有半透明(0.75)」高質感配色 💡 */
+        .bg-crop-大菊 { background-color: rgba(254, 240, 138, 0.75) !important; } /* 亮淺黃 */
+        .bg-crop-葵花 { background-color: rgba(253, 224, 71, 0.75) !important; }  /* 明亮暖黃 */
+        .bg-crop-松樹 { background-color: rgba(187, 247, 208, 0.75) !important; }  /* 柔和淺松綠 */
+        .bg-crop-掌象 { background-color: rgba(134, 239, 172, 0.75) !important; }  /* 清新仙人掌綠 */
+        .bg-crop-奇菇 { background-color: rgba(253, 186, 116, 0.75) !important; }  /* 輕盈淺橘 */
+        .bg-crop-蟠桃 { background-color: rgba(254, 205, 211, 0.75) !important; }  /* 粉嫩桃紅 */
+        .bg-crop-葡萄 { background-color: rgba(233, 213, 255, 0.75) !important; }  /* 粉紫羅蘭 */
+        .bg-crop-天椒 { background-color: rgba(252, 165, 165, 0.75) !important; }  /* 粉紅辣椒 */
+        .bg-crop-彼岸 { background-color: rgba(254, 163, 180, 0.75) !important; }  /* 柔粉彼岸 */
+        .bg-crop-幻月 { background-color: rgba(214, 211, 242, 0.75) !important; }  /* 月光淡藍紫 */
+        .bg-crop-龍狗 { background-color: rgba(244, 114, 182, 0.5) !important; }   /* 半透火龍果 */
+        .bg-crop-紅包 { background-color: rgba(248, 113, 113, 0.6) !important; }   /* 半透喜慶紅 */
+        .bg-crop-蘆薈 { background-color: rgba(201, 230, 133, 0.75) !important; }  /* 淺嫩草綠 */
+        .bg-crop-月蟾 { background-color: rgba(176, 196, 222, 0.75) !important; }  /* 淺冰藍灰 */
+        .bg-crop-月兔 { background-color: rgba(226, 232, 240, 0.75) !important; }  /* 質感淡灰 */
+        .bg-crop-影梅 { background-color: rgba(24bc, 182, 214, 0.6) !important; }  /* 暗粉梅汁 */
+        .bg-crop-星玫 { background-color: rgba(147, 197, 253, 0.75) !important; }  /* 淺亮星空藍 */
 
-        /* 至臻文字基礎色 */
+        /* 統一文字基礎色與強烈排版一致性（修復松樹重疊） */
         .t-至臻 { color: #1e3a8a; }
-        
-        /* 若深底色需要白字，在此處強制覆蓋作物格內的文字顏色 */
-        .bg-crop-松樹 .crop-text, .bg-crop-松樹 .level-text,
-        .bg-crop-奇菇 .crop-text, .bg-crop-奇菇 .level-text,
-        .bg-crop-葡萄 .crop-text, .bg-crop-葡萄 .level-text,
-        .bg-crop-天椒 .crop-text, .bg-crop-天椒 .level-text,
-        .bg-crop-彼岸 .crop-text, .bg-crop-彼岸 .level-text,
-        .bg-crop-紅包 .crop-text, .bg-crop-紅包 .level-text,
-        .bg-crop-蘆薈 .crop-text, .bg-crop-蘆薈 .level-text,
-        .bg-crop-月蟾 .crop-text, .bg-crop-月蟾 .level-text,
-        .bg-crop-星玫 .crop-text, .bg-crop-星玫 .level-text {
-            color: #ffffff !important;
-        }
-
-        /* 其他常規文字顏色 */
         .t-黃金 { color: #c2410c; }
         .t-紫色 { color: #6b21a8; }
         .t-藍色 { color: rgb(0, 150, 214) !important; }
         .t-綠色 { color: #15803d; }
         .t-灰色 { color: rgb(100, 116, 139) !important; }
-        .t-style-巨大 { color: #ef4444 !important; }
+        
+        /* 巨大化樣式：統一文字顯色，不再使用多重文字描邊，從根本杜絕錯位 */
+        .t-style-巨大 .level-text { color: #ef4444 !important; font-weight: 900 !important; }
 
-        /* 巨大化若是遇到深色背景，加上白邊確保字體清晰 */
-        .bg-crop-松樹.t-style-巨大 .level-text, .bg-crop-奇菇.t-style-巨大 .level-text,
-        .bg-crop-葡萄.t-style-巨大 .level-text, .bg-crop-天椒.t-style-巨大 .level-text,
-        .bg-crop-彼岸.t-style-巨大 .level-text, .bg-crop-紅包.t-style-巨大 .level-text,
-        .bg-crop-蘆薈.t-style-巨大 .level-text, .bg-crop-月蟾.t-style-巨大 .level-text,
-        .bg-crop-星玫.t-style-巨大 .level-text {
-            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-        }
-
-        /* 流光型態獨立全螢幕最高對比度樣式（不受作物底色干擾） */
+        /* ✨ 核心變更：流光型態「高明度半透明極光」樣式 ✨ */
         .bg-style-流光 { 
-            background: linear-gradient(135deg, #ccf6ff 0%, #e3d5ff 40%, #ffcbe4 70%, #ffe9c5 100%) !important; 
-            box-shadow: inset 0 0 4px rgba(168, 85, 247, 0.2);
+            background: linear-gradient(135deg, rgba(204,246,255,0.7) 0%, rgba(227,213,255,0.7) 40%, rgba(255,203,228,0.7) 70%, rgba(255,233,197,0.7) 100%) !important; 
+            box-shadow: inset 0 0 3px rgba(168, 85, 247, 0.3);
         }
-        .t-style-流光 .crop-text,
-        .t-style-流光 .level-text {
-            color: #1e293b !important;
-            font-weight: 900 !important;
-            text-shadow: 
-                -1px -1px 0 #ffffff, 1px -1px 0 #ffffff,
-                -1px  1px 0 #ffffff, 1px  1px 0 #ffffff,
-                0px  0px 3px rgba(255,255,255,1) !important;
-        }
+        .t-style-流光 .crop-text { color: #2d3748 !important; }
+        .t-style-流光 .level-text { color: #7c3aed !important; font-weight: 900 !important; }
 
         #saveStatus { font-size: 13px; color: #059669; font-weight: bold; }
 
@@ -393,7 +363,7 @@
 <body>
 
     <div class="header-container">
-        <h1>蛋仔派對瘋狂農場規劃器 V6.0 旗艦優化版</h1>
+        <h1>蛋仔派對瘋狂農場規劃器 V6.1 旗艦修復版</h1>
         <div class="controls">
             <div class="control-group">
                 <span>選定作物:</span>
@@ -431,6 +401,7 @@
 
         <div class="map-wrapper">
             <div class="map-container" id="mapMain">
+                <!-- 區域 1 -->
                 <div class="zone" id="z1">
                     <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
                     <div class="zone-body">
@@ -438,6 +409,7 @@
                         <div class="grid-8x8" data-zone="1"></div>
                     </div>
                 </div>
+                <!-- 區域 2 -->
                 <div class="zone" id="z2">
                     <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
                     <div class="zone-body">
@@ -445,6 +417,7 @@
                         <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
                     </div>
                 </div>
+                <!-- 區域 3 -->
                 <div class="zone" id="z3">
                     <div class="labels-row hidden-label"></div>
                     <div class="zone-body">
@@ -452,6 +425,7 @@
                         <div class="grid-8x8" data-zone="3"></div>
                     </div>
                 </div>
+                <!-- 區域 4 -->
                 <div class="zone" id="z4">
                     <div class="labels-row hidden-label"></div>
                     <div class="zone-body">
@@ -459,6 +433,7 @@
                         <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
                     </div>
                 </div>
+                <!-- 區域 5 -->
                 <div class="zone" id="z5">
                     <div class="zone-body">
                         <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
@@ -466,6 +441,7 @@
                     </div>
                     <div class="labels-row hidden-label"></div>
                 </div>
+                <!-- 區域 6 -->
                 <div class="zone" id="z6">
                     <div class="zone-body">
                         <div class="grid-8x8" data-zone="6"></div>
@@ -473,6 +449,7 @@
                     </div>
                     <div class="labels-row hidden-label"></div>
                 </div>
+                <!-- 區域 7 -->
                 <div class="zone" id="z7">
                     <div class="zone-body">
                         <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
@@ -480,6 +457,7 @@
                     </div>
                     <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
                 </div>
+                <!-- 區域 8 -->
                 <div class="zone" id="z8">
                     <div class="zone-body">
                         <div class="grid-8x8" data-zone="8"></div>
@@ -492,30 +470,14 @@
 
         <div class="sidebar-right">
             <div class="panel-title">📊 田間即時栽種統計</div>
-            
             <div class="grid-summary-box">
-                <div class="summary-item">
-                    <span class="summary-label">總格數</span>
-                    <span class="summary-val">512 格</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">已使用格數</span>
-                    <span class="summary-val" id="statPlantedGrids">0 格</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">剩餘可用格數</span>
-                    <span class="summary-val" id="statRemainGrids">512 格</span>
-                </div>
-                <div class="summary-item" style="border-color:#bbf7d0; background:#f0fdf4;">
-                    <span class="summary-label" style="color:#16a34a;">田間種子總數</span>
-                    <span class="summary-val" id="statTotalSeeds" style="color:#16a34a;">0 顆</span>
-                </div>
+                <div class="summary-item"><span class="summary-label">總格數</span><span class="summary-val">512 格</span></div>
+                <div class="summary-item"><span class="summary-label">已使用格數</span><span class="summary-val" id="statPlantedGrids">0 格</span></div>
+                <div class="summary-item"><span class="summary-label">剩餘可用格數</span><span class="summary-val" id="statRemainGrids">512 格</span></div>
+                <div class="summary-item" style="border-color:#bbf7d0; background:#f0fdf4;"><span class="summary-label" style="color:#16a34a;">田間種子總數</span><span class="summary-val" id="statTotalSeeds" style="color:#16a34a;">0 顆</span></div>
             </div>
-
             <table class="stats-table">
-                <thead>
-                    <tr><th>作物</th><th>普</th><th>幻</th><th>異</th><th>巨</th><th>流</th><th>總</th></tr>
-                </thead>
+                <thead><tr><th>作物</th><th>普</th><th>幻</th><th>異</th><th>巨</th><th>流</th><th>總</th></tr></thead>
                 <tbody id="statsBody"></tbody>
             </table>
         </div>
@@ -590,7 +552,7 @@
 
             document.querySelectorAll('.clickable-crop').forEach(element => {
                 element.addEventListener('click', () => {
-                    const shortName = element.getAttribute('data-short'); cropSelect.value = shortName;
+                    cropSelect.value = element.getAttribute('data-short');
                 });
             });
             invBody.addEventListener('input', autoSaveData);
@@ -633,13 +595,11 @@
                 if(currentStyle === '流') {
                     cell.classList.add('bg-style-流光', 't-style-流光');
                 } else {
-                    // 💡 繪製判定：至臻系列優先套用作物專屬底色，其餘系列套用大類別底色 💡
                     if (cropInfo.cat === '至臻') {
                         cell.classList.add(`bg-crop-${cropShort}`);
                     } else {
                         cell.classList.add(`bg-cat-${cropInfo.cat}`);
                     }
-                    
                     if(currentStyle === '巨') cell.classList.add('t-style-巨大');
                     else cell.classList.add(`t-${cropInfo.cat}`);
                 }
@@ -656,25 +616,15 @@
 
         function calculateStats() {
             const cells = document.querySelectorAll('.cell[data-crop]');
-            const statsMap = {}; 
-            let typeTotals = { 普: 0, 幻: 0, 異: 0, 巨: 0,流: 0 };
-            let totalPlantedGrids = cells.length; 
-            let totalSeedsCount = 0;              
+            const statsMap = {}; let typeTotals = { 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
+            let totalPlantedGrids = cells.length; let totalSeedsCount = 0;              
 
             cells.forEach(cell => {
-                const crop = cell.dataset.crop; 
-                const style = cell.dataset.style || '普';
-                const lvl = parseInt(cell.dataset.lvl) || 1;
+                const crop = cell.dataset.crop; const style = cell.dataset.style || '普'; const lvl = parseInt(cell.dataset.lvl) || 1;
                 if(!crop) return;
-
-                totalSeedsCount += lvl;
-                typeTotals[style]++;
-
+                totalSeedsCount += lvl; typeTotals[style]++;
                 if(!statsMap[crop]) {
-                    statsMap[crop] = { 
-                        name: cropsData.find(c => c.short === crop)?.name || crop, 
-                        普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 
-                    };
+                    statsMap[crop] = { name: cropsData.find(c => c.short === crop)?.name || crop, 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
                 }
                 statsMap[crop][style]++;
             });
@@ -683,44 +633,30 @@
             document.getElementById('statRemainGrids').textContent = (512 - totalPlantedGrids) + " 格";
             document.getElementById('statTotalSeeds').textContent = totalSeedsCount + " 顆";
 
-            const statsBody = document.getElementById('statsBody'); 
-            statsBody.innerHTML = '';
-
-            const summaryTr = document.createElement('tr');
-            summaryTr.classList.add('total-type-row');
+            const statsBody = document.getElementById('statsBody'); statsBody.innerHTML = '';
+            const summaryTr = document.createElement('tr'); summaryTr.classList.add('total-type-row');
             const globalSum = typeTotals.普 + typeTotals.幻 + typeTotals.異 + typeTotals.巨 + typeTotals.流;
             summaryTr.innerHTML = `
                 <td style="color:#1d4ed8; font-weight:bold;">型態小計</td>
-                <td>${typeTotals.普 || 0}</td>
-                <td>${typeTotals.幻 || 0}</td>
-                <td>${typeTotals.異 || 0}</td>
-                <td style="color:#ef4444;">${typeTotals.巨 || 0}</td>
-                <td style="color:#7c3aed;">${typeTotals.流 || 0}</td>
+                <td>${typeTotals.普 || 0}</td><td>${typeTotals.幻 || 0}</td><td>${typeTotals.異 || 0}</td>
+                <td style="color:#ef4444;">${typeTotals.巨 || 0}</td><td style="color:#7c3aed;">${typeTotals.流 || 0}</td>
                 <td style="background:#dbeafe; color:#1e40af;">${globalSum}</td>
             `;
             statsBody.appendChild(summaryTr);
 
             if(totalPlantedGrids === 0) {
-                const emptyTr = document.createElement('tr');
-                emptyTr.innerHTML = `<td colspan="7" style="color:#94a3b8; padding: 20px 0;">暫無耕作數據</td>`;
-                statsBody.appendChild(emptyTr);
-                return;
+                statsBody.innerHTML += `<tr><td colspan="7" style="color:#94a3b8; padding: 20px 0;">暫無耕作數據</td></tr>`; return;
             }
-
             for(let key in statsMap) {
-                const item = statsMap[key]; 
-                const sum = item.普 + item.幻 + item.異 + item.巨 + item.流;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight:bold; color:#1e3a8a; text-align:left; padding-left:6px;">${item.name}(${key})</td>
-                    <td>${item.普 || '-'}</td>
-                    <td>${item.幻 || '-'}</td>
-                    <td>${item.異 || '-'}</td>
-                    <td style="color:#ef4444; font-weight:bold;">${item.巨 || '-'}</td>
-                    <td style="color:#7c3aed; font-weight:bold;">${item.流 || '-'}</td>
-                    <td style="font-weight:bold; background:#f8fafc;">${sum}</td>
+                const item = statsMap[key]; const sum = item.普 + item.幻 + item.異 + item.巨 + item.流;
+                statsBody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:bold; color:#1e3a8a; text-align:left; padding-left:6px;">${item.name}(${key})</td>
+                        <td>${item.普 || '-'}</td><td>${item.幻 || '-'}</td><td>${item.異 || '-'}</td>
+                        <td style="color:#ef4444; font-weight:bold;">${item.巨 || '-'}</td><td style="color:#7c3aed; font-weight:bold;">${item.流 || '-'}</td>
+                        <td style="font-weight:bold; background:#f8fafc;">${sum}</td>
+                    </tr>
                 `;
-                statsBody.appendChild(tr);
             }
         }
 
@@ -774,20 +710,14 @@
                             const found = cropsData.find(c => c.name.startsWith(item.crop) || c.short.endsWith(item.crop));
                             if(found) currentShort = found.short;
                         }
-
                         const cell = document.querySelector(`.cell[data-zone="${item.z}"][data-row="${item.r}"][data-col="${item.c}"]`);
                         if(cell) {
                             const cropInfo = cropsData.find(c => c.short === currentShort);
                             if(cropInfo) {
                                 if(item.style === '流') cell.classList.add('bg-style-流光', 't-style-流光');
                                 else {
-                                    // 💡 載入判定：至臻系列優先還原作物專屬底色 💡
-                                    if (cropInfo.cat === '至臻') {
-                                        cell.classList.add(`bg-crop-${currentShort}`);
-                                    } else {
-                                        cell.classList.add(`bg-cat-${cropInfo.cat}`);
-                                    }
-                                    
+                                    if (cropInfo.cat === '至臻') cell.classList.add(`bg-crop-${currentShort}`);
+                                    else cell.classList.add(`bg-cat-${cropInfo.cat}`);
                                     if(item.style === '巨') cell.classList.add('t-style-巨大');
                                     else cell.classList.add(`t-${cropInfo.cat}`);
                                 }
