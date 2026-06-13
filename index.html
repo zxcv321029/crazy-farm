@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蛋仔派對瘋狂農場規劃器 V6.1 修正版 (至臻粉嫩半透明)</title>
+    <title>蛋仔派對瘋狂農場規劃器 V7.4 (背包全局加總版)</title>
     <style>
         :root {
             --bg-main: #f0f4f8;
@@ -79,10 +79,9 @@
             color: white;
             border-color: #3b82f6;
         }
-        .type-btn[data-type="巨"].active {
-            background-color: #ef4444;
-            border-color: #ef4444;
-        }
+        .type-btn[data-type="幻"].active { background-color: #2563eb; border-color: #2563eb; color: white; }
+        .type-btn[data-type="異"].active { background-color: #ea580c; border-color: #ea580c; color: white; }
+        .type-btn[data-type="巨"].active { background-color: #ef4444; border-color: #ef4444; color: white; }
         .type-btn[data-type="流"].active {
             background: linear-gradient(135deg, #00b0f0, #a855f7, #f97316);
             color: white;
@@ -126,7 +125,7 @@
 
         @media (min-width: 1280px) {
             .main-layout {
-                grid-template-columns: 390px 1fr 340px;
+                grid-template-columns: 410px 1fr 340px;
             }
         }
 
@@ -155,8 +154,14 @@
         .inventory-table, .stats-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
         }
+        
+        /* 🔧 左側背包欄字體微調：10pt、全面不加粗 */
+        .inventory-table th, .inventory-table td {
+            font-size: 10pt !important;
+            font-weight: normal !important;
+        }
+        
         .inventory-table th, .stats-table th {
             background: #f8fafc;
             position: sticky;
@@ -171,6 +176,9 @@
             border-bottom: 1px solid #f1f5f9;
             text-align: center;
         }
+        .stats-table th, .stats-table td {
+            font-size: 13px;
+        }
         .stats-table td {
             padding: 7px 3px;
             border-bottom: 1px solid #f1f5f9;
@@ -178,10 +186,22 @@
         }
         .cat-row {
             background: #f1f5f9;
-            font-weight: bold;
+            font-weight: bold !important;
             text-align: left !important;
             padding-left: 8px !important;
             color: #475569;
+        }
+        /* 各系列分組加總行樣式 */
+        .cat-sum-row {
+            background: #fff1f2;
+            font-weight: bold !important;
+            color: #e11d48;
+        }
+        /* 背包最頂端全局總加總表樣式 */
+        .global-inv-sum-row {
+            background: #e0f2fe;
+            font-weight: bold !important;
+            color: #0369a1;
         }
 
         .clickable-crop {
@@ -192,22 +212,21 @@
             text-decoration: underline;
         }
 
+        /* 🔧 徹底消除背包欄微調按鈕、不加粗、10pt */
         .inv-input {
-            width: 44px;
+            width: 46px;
             padding: 4px 2px;
             text-align: center;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
+            font-size: 10pt !important;
+            font-weight: normal !important;
+            -moz-appearance: textfield;
         }
         .inv-input::-webkit-outer-spin-button,
         .inv-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
-        }
-        .inv-input[type="number"] {
-            -moz-appearance: textfield;
         }
 
         .map-wrapper {
@@ -293,77 +312,60 @@
         .bg-cat-綠色 { background-color: #f0fdf4 !important; }
         .bg-cat-灰色 { background-color: #f8fafc !important; }
 
-        /* 💡 核心變更：至臻系列 17 種作物全新的「亮、淺、帶有半透明(0.75)」高質感配色 💡 */
-        .bg-crop-大菊 { background-color: rgba(254, 240, 138, 0.75) !important; } /* 亮淺黃 */
-        .bg-crop-葵花 { background-color: rgba(253, 224, 71, 0.75) !important; }  /* 明亮暖黃 */
-        .bg-crop-松樹 { background-color: rgba(187, 247, 208, 0.75) !important; }  /* 柔和淺松綠 */
-        .bg-crop-掌象 { background-color: rgba(134, 239, 172, 0.75) !important; }  /* 清新仙人掌綠 */
-        .bg-crop-奇菇 { background-color: rgba(253, 186, 116, 0.75) !important; }  /* 輕盈淺橘 */
-        .bg-crop-蟠桃 { background-color: rgba(254, 205, 211, 0.75) !important; }  /* 粉嫩桃紅 */
-        .bg-crop-葡萄 { background-color: rgba(233, 213, 255, 0.75) !important; }  /* 粉紫羅蘭 */
-        .bg-crop-天椒 { background-color: rgba(252, 165, 165, 0.75) !important; }  /* 粉紅辣椒 */
-        .bg-crop-彼岸 { background-color: rgba(254, 163, 180, 0.75) !important; }  /* 柔粉彼岸 */
-        .bg-crop-幻月 { background-color: rgba(214, 211, 242, 0.75) !important; }  /* 月光淡藍紫 */
-        .bg-crop-龍狗 { background-color: rgba(244, 114, 182, 0.5) !important; }   /* 半透火龍果 */
-        .bg-crop-紅包 { background-color: rgba(248, 113, 113, 0.6) !important; }   /* 半透喜慶紅 */
-        .bg-crop-蘆薈 { background-color: rgba(201, 230, 133, 0.75) !important; }  /* 淺嫩草綠 */
-        .bg-crop-月蟾 { background-color: rgba(176, 196, 222, 0.75) !important; }  /* 淺冰藍灰 */
-        .bg-crop-月兔 { background-color: rgba(226, 232, 240, 0.75) !important; }  /* 質感淡灰 */
-        .bg-crop-影梅 { background-color: rgba(24bc, 182, 214, 0.6) !important; }  /* 暗粉梅汁 */
-        .bg-crop-星玫 { background-color: rgba(147, 197, 253, 0.75) !important; }  /* 淺亮星空藍 */
+        /* 💡 至臻系列亮度調配淺色底 */
+        .bg-crop-大菊 { background-color: rgba(254, 240, 138, 0.75) !important; } 
+        .bg-crop-葵花 { background-color: rgba(253, 224, 71, 0.75) !important; }  
+        .bg-crop-松樹 { background-color: rgba(187, 247, 208, 0.75) !important; }  
+        .bg-crop-掌象 { background-color: rgba(134, 239, 172, 0.75) !important; }  
+        .bg-crop-奇菇 { background-color: rgba(253, 186, 116, 0.75) !important; }  
+        .bg-crop-蟠桃 { background-color: rgba(254, 205, 211, 0.75) !important; }  
+        .bg-crop-葡萄 { background-color: rgba(233, 213, 255, 0.75) !important; }  
+        .bg-crop-天椒 { background-color: rgba(252, 165, 165, 0.75) !important; }  
+        .bg-crop-彼岸 { background-color: rgba(254, 163, 180, 0.75) !important; }  
+        .bg-crop-幻月 { background-color: rgba(214, 211, 242, 0.75) !important; }  
+        .bg-crop-龍狗 { background-color: rgba(244, 114, 182, 0.5) !important; }   
+        .bg-crop-紅包 { background-color: rgba(248, 113, 113, 0.6) !important; }   
+        .bg-crop-蘆薈 { background-color: rgba(201, 230, 133, 0.75) !important; }  
+        .bg-crop-月蟾 { background-color: rgba(176, 196, 222, 0.75) !important; }  
+        .bg-crop-月兔 { background-color: rgba(226, 232, 240, 0.75) !important; }  
+        .bg-crop-影梅 { background-color: rgba(244, 182, 214, 0.6) !important; }  
+        .bg-crop-星玫 { background-color: rgba(147, 197, 253, 0.75) !important; }  
 
-        /* 統一文字基礎色與強烈排版一致性（修復松樹重疊） */
-        .t-至臻 { color: #1e3a8a; }
+        /* 🎯 文字與指定色彩修復 */
+        /* 🔧 修正：至臻果字體一律採用指定色 rgb(0, 0, 204) */
+        .t-至臻 { color: rgb(0, 0, 204) !important; }
         .t-黃金 { color: #c2410c; }
         .t-紫色 { color: #6b21a8; }
         .t-藍色 { color: rgb(0, 150, 214) !important; }
         .t-綠色 { color: #15803d; }
         .t-灰色 { color: rgb(100, 116, 139) !important; }
         
-        /* 巨大化樣式：統一文字顯色，不再使用多重文字描邊，從根本杜絕錯位 */
-        .t-style-巨大 .level-text { color: #ef4444 !important; font-weight: 900 !important; }
-
-        /* ✨ 核心變更：流光型態「高明度半透明極光」樣式 ✨ */
+        /* 🔥【型態高辨識核心修復區】🔥 */
+        .t-style-幻 .level-text { color: #1d4ed8 !important; font-weight: 900 !important; font-size: 11px; }
+        .t-style-異 .level-text { color: #ea580c !important; font-weight: 900 !important; font-size: 11px; }
+        .t-style-巨大 .level-text { color: #ef4444 !important; font-weight: 900 !important; font-size: 11px; }
         .bg-style-流光 { 
             background: linear-gradient(135deg, rgba(204,246,255,0.7) 0%, rgba(227,213,255,0.7) 40%, rgba(255,203,228,0.7) 70%, rgba(255,233,197,0.7) 100%) !important; 
             box-shadow: inset 0 0 3px rgba(168, 85, 247, 0.3);
         }
         .t-style-流光 .crop-text { color: #2d3748 !important; }
-        .t-style-流光 .level-text { color: #7c3aed !important; font-weight: 900 !important; }
+        .t-style-流光 .level-text { color: #7c3aed !important; font-weight: 900 !important; font-size: 11px; }
 
         #saveStatus { font-size: 13px; color: #059669; font-weight: bold; }
-
         .grid-summary-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 12px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 12px;
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;
         }
-        .summary-item {
-            display: flex;
-            flex-direction: column;
-            background: #ffffff;
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid #f1f5f9;
-        }
+        .summary-item { display: flex; flex-direction: column; background: #ffffff; padding: 6px; border-radius: 4px; border: 1px solid #f1f5f9; }
         .summary-label { color: #64748b; font-weight: 500; }
         .summary-val { font-size: 14px; font-weight: bold; color: #1e3a8a; margin-top: 2px; }
-        .total-type-row {
-            background: #eff6ff !important;
-            font-weight: bold;
-        }
+        .total-type-row { background: #eff6ff !important; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="header-container">
-        <h1>蛋仔派對瘋狂農場規劃器 V6.1 旗艦修復版</h1>
+        <h1>蛋仔派對瘋狂農場規劃器 V7.4 旗艦版</h1>
         <div class="controls">
             <div class="control-group">
                 <span>選定作物:</span>
@@ -372,8 +374,8 @@
             <div class="control-group">
                 <span>型態:</span>
                 <button class="type-btn active" data-type="普">普</button>
-                <button class="type-btn" data-type="幻">幻</button>
-                <button class="type-btn" data-type="異">異</button>
+                <button class="type-btn" data-type="幻" style="color:#2563eb;">幻</button>
+                <button class="type-btn" data-type="異" style="color:#ea580c;">異</button>
                 <button class="type-btn" data-type="巨" style="color:#ef4444;">巨</button>
                 <button class="type-btn" data-type="流" style="color:#a855f7;">流</button>
             </div>
@@ -401,70 +403,24 @@
 
         <div class="map-wrapper">
             <div class="map-container" id="mapMain">
-                <!-- 區域 1 -->
-                <div class="zone" id="z1">
-                    <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
-                    <div class="zone-body">
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                        <div class="grid-8x8" data-zone="1"></div>
-                    </div>
-                </div>
-                <!-- 區域 2 -->
-                <div class="zone" id="z2">
-                    <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                    <div class="zone-body">
-                        <div class="grid-8x8" data-zone="2"></div>
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                    </div>
-                </div>
-                <!-- 區域 3 -->
-                <div class="zone" id="z3">
-                    <div class="labels-row hidden-label"></div>
-                    <div class="zone-body">
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                        <div class="grid-8x8" data-zone="3"></div>
-                    </div>
-                </div>
-                <!-- 區域 4 -->
-                <div class="zone" id="z4">
-                    <div class="labels-row hidden-label"></div>
-                    <div class="zone-body">
-                        <div class="grid-8x8" data-zone="4"></div>
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                    </div>
-                </div>
-                <!-- 區域 5 -->
-                <div class="zone" id="z5">
-                    <div class="zone-body">
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                        <div class="grid-8x8" data-zone="5"></div>
-                    </div>
-                    <div class="labels-row hidden-label"></div>
-                </div>
-                <!-- 區域 6 -->
-                <div class="zone" id="z6">
-                    <div class="zone-body">
-                        <div class="grid-8x8" data-zone="6"></div>
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                    </div>
-                    <div class="labels-row hidden-label"></div>
-                </div>
-                <!-- 區域 7 -->
-                <div class="zone" id="z7">
-                    <div class="zone-body">
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                        <div class="grid-8x8" data-zone="7"></div>
-                    </div>
-                    <div class="labels-row"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div></div>
-                </div>
-                <!-- 區域 8 -->
-                <div class="zone" id="z8">
-                    <div class="zone-body">
-                        <div class="grid-8x8" data-zone="8"></div>
-                        <div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                    </div>
-                    <div class="labels-row"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>
-                </div>
+                <script>
+                    for(let z=1; z<=8; z++) {
+                        document.write(`
+                        <div class="zone" id="z${z}">
+                            <div class="labels-row ${([3,4,5,6].includes(z)) ? 'hidden-label' : ''}">
+                                ${[2,4,6,8].includes(z) ? '<div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div>' : '<div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>'}
+                            </div>
+                            <div class="zone-body">
+                                ${z % 2 !== 0 ? '<div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>' : ''}
+                                <div class="grid-8x8" data-zone="${z}"></div>
+                                ${z % 2 === 0 ? '<div class="labels-col"><div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div></div>' : ''}
+                            </div>
+                            <div class="labels-row ${([1,2,7,8].includes(z)) ? 'hidden-label' : ''}">
+                                ${[2,4,6,8].includes(z) ? '<div>8</div><div>7</div><div>6</div><div>5</div><div>4</div><div>3</div><div>2</div><div>1</div>' : '<div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>'}
+                            </div>
+                        </div>`);
+                    }
+                </script>
             </div>
         </div>
 
@@ -531,31 +487,94 @@
             });
 
             const invBody = document.getElementById('inventoryBody');
-            invBody.innerHTML = ""; lastCat = "";
+            invBody.innerHTML = ""; 
+
+            // 🔧 核心需求：在左側背包庫存最頂端，比照田間加總，建立「所有系列的全局總加總表」
+            const globalSumTr = document.createElement('tr');
+            globalSumTr.classList.add('global-inv-sum-row');
+            globalSumTr.innerHTML = `
+                <td style="text-align:left; padding-left:4px;">全部庫存總計</td>
+                <td>-</td>
+                <td id="inv-global-普">0</td>
+                <td id="inv-global-幻">0</td>
+                <td id="inv-global-異">0</td>
+                <td id="inv-global-巨">0</td>
+                <td id="inv-global-流">0</td>
+            `;
+            invBody.appendChild(globalSumTr);
+
+            lastCat = "";
             cropsData.forEach((c) => {
                 if(c.cat !== lastCat) {
                     lastCat = c.cat;
+                    // 插入各系列大標題
                     const catTr = document.createElement('tr'); catTr.innerHTML = `<td colspan="7" class="cat-row">★ ${c.cat}系列</td>`; invBody.appendChild(catTr);
+                    
+                    // 插入該系列分組加總行
+                    const sumTr = document.createElement('tr'); 
+                    sumTr.classList.add('cat-sum-row');
+                    sumTr.id = `inv-sum-${c.cat}`;
+                    sumTr.innerHTML = `
+                        <td style="text-align:left; padding-left:4px;">系列加總</td>
+                        <td>-</td>
+                        <td id="inv-sum-${c.cat}-普">0</td>
+                        <td id="inv-sum-${c.cat}-幻">0</td>
+                        <td id="inv-sum-${c.cat}-異">0</td>
+                        <td id="inv-sum-${c.cat}-巨">0</td>
+                        <td id="inv-sum-${c.cat}-流">0</td>
+                    `;
+                    invBody.appendChild(sumTr);
                 }
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="text-align:left; padding-left:4px;" class="t-${c.cat} clickable-crop" data-short="${c.short}">${c.name}</td>
-                    <td class="clickable-crop" data-short="${c.short}"><b class="t-${c.cat}">${c.short}</b></td>
-                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="普" min="0" value="0"></td>
-                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="幻" min="0" value="0"></td>
-                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="異" min="0" value="0"></td>
-                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="巨" min="0" value="0"></td>
-                    <td><input type="number" class="inv-input" data-short="${c.short}" data-mode="流" min="0" value="0"></td>
+                    <td class="clickable-crop" data-short="${c.short}"><span class="t-${c.cat}">${c.short}</span></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-cat="${c.cat}" data-mode="普" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-cat="${c.cat}" data-mode="幻" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-cat="${c.cat}" data-mode="異" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-cat="${c.cat}" data-mode="巨" min="0" value="0"></td>
+                    <td><input type="number" class="inv-input" data-short="${c.short}" data-cat="${c.cat}" data-mode="流" min="0" value="0"></td>
                 `;
                 invBody.appendChild(tr);
             });
 
             document.querySelectorAll('.clickable-crop').forEach(element => {
-                element.addEventListener('click', () => {
-                    cropSelect.value = element.getAttribute('data-short');
+                element.addEventListener('click', () => { cropSelect.value = element.getAttribute('data-short'); });
+            });
+            invBody.addEventListener('input', () => {
+                calculateInvTotals();
+                autoSaveData();
+            });
+        }
+
+        // 🔧 計算左側背包庫存的「各系列獨立加總」與「頂部全局總加總」
+        function calculateInvTotals() {
+            const categories = ['至臻', '黃金', '紫色', '藍色', '綠色', '灰色'];
+            const modes = ['普', '幻', '異', '巨', '流'];
+            
+            // 建立全局各型態加總計數器
+            let globalTotals = { 普: 0, 幻: 0, 異: 0, 巨: 0, ...
+			modes.reduce((acc, m) => ({...acc, [m]: 0}), {}) };
+
+            categories.forEach(cat => {
+                modes.forEach(mode => {
+                    let sum = 0;
+                    document.querySelectorAll(`.inv-input[data-cat="${cat}"][data-mode="${mode}"]`).forEach(input => {
+                        sum += parseInt(input.value) || 0;
+                    });
+                    const sumEl = document.getElementById(`inv-sum-${cat}-${mode}`);
+                    if(sumEl) sumEl.textContent = sum;
+                    
+                    // 累計到全局總和
+                    globalTotals[mode] += sum;
                 });
             });
-            invBody.addEventListener('input', autoSaveData);
+
+            // 渲染頂部「全部庫存總計」的數值
+            modes.forEach(mode => {
+                const globalSumEl = document.getElementById(`inv-global-${mode}`);
+                if(globalSumEl) globalSumEl.textContent = globalTotals[mode];
+            });
         }
 
         const typeBtns = document.querySelectorAll('.type-btn');
@@ -592,19 +611,20 @@
                 delete cell.dataset.crop; delete cell.dataset.style; delete cell.dataset.lvl;
             } else {
                 const cropInfo = cropsData.find(c => c.short === cropShort);
+                
                 if(currentStyle === '流') {
                     cell.classList.add('bg-style-流光', 't-style-流光');
                 } else {
-                    if (cropInfo.cat === '至臻') {
-                        cell.classList.add(`bg-crop-${cropShort}`);
-                    } else {
-                        cell.classList.add(`bg-cat-${cropInfo.cat}`);
-                    }
+                    if (cropInfo.cat === '至臻') cell.classList.add(`bg-crop-${cropShort}`);
+                    else cell.classList.add(`bg-cat-${cropInfo.cat}`);
+                    
                     if(currentStyle === '巨') cell.classList.add('t-style-巨大');
+                    else if(currentStyle === '幻') cell.classList.add('t-style-幻');
+                    else if(currentStyle === '異') cell.classList.add('t-style-異');
                     else cell.classList.add(`t-${cropInfo.cat}`);
                 }
-                cell.dataset.crop = cropShort; cell.dataset.style = currentStyle; cell.dataset.lvl = level;
                 
+                cell.dataset.crop = cropShort; cell.dataset.style = currentStyle; cell.dataset.lvl = level;
                 let displayTypeLabel = currentStyle === '普' ? '' : currentStyle;
                 cell.innerHTML = `
                     <span class="crop-text">${cropShort}</span>
@@ -616,15 +636,17 @@
 
         function calculateStats() {
             const cells = document.querySelectorAll('.cell[data-crop]');
-            const statsMap = {}; let typeTotals = { 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
-            let totalPlantedGrids = cells.length; let totalSeedsCount = 0;              
+            const statsMap = {}; 
+            let typeTotals = { 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
+            let totalPlantedGrids = cells.length; 
+            let totalSeedsCount = 0;              
 
             cells.forEach(cell => {
                 const crop = cell.dataset.crop; const style = cell.dataset.style || '普'; const lvl = parseInt(cell.dataset.lvl) || 1;
                 if(!crop) return;
                 totalSeedsCount += lvl; typeTotals[style]++;
                 if(!statsMap[crop]) {
-                    statsMap[crop] = { name: cropsData.find(c => c.short === crop)?.name || crop, 普: 0, 幻: 0, 異: 0, 巨: 0, 流: 0 };
+                    statsMap[crop] = { name: cropsData.find(c => c.short === crop)?.name || crop, 普: 0, 幻: 0, 異: 0, 巨: 0,流: 0 };
                 }
                 statsMap[crop][style]++;
             });
@@ -634,12 +656,16 @@
             document.getElementById('statTotalSeeds').textContent = totalSeedsCount + " 顆";
 
             const statsBody = document.getElementById('statsBody'); statsBody.innerHTML = '';
+            
             const summaryTr = document.createElement('tr'); summaryTr.classList.add('total-type-row');
             const globalSum = typeTotals.普 + typeTotals.幻 + typeTotals.異 + typeTotals.巨 + typeTotals.流;
             summaryTr.innerHTML = `
-                <td style="color:#1d4ed8; font-weight:bold;">型態小計</td>
-                <td>${typeTotals.普 || 0}</td><td>${typeTotals.幻 || 0}</td><td>${typeTotals.異 || 0}</td>
-                <td style="color:#ef4444;">${typeTotals.巨 || 0}</td><td style="color:#7c3aed;">${typeTotals.流 || 0}</td>
+                <td style="color:#1e40af; font-weight:bold;">田間總計</td>
+                <td>${typeTotals.普 || 0}</td>
+                <td style="color:#1d4ed8;">${typeTotals.幻 || 0}</td>
+                <td style="color:#ea580c;">${typeTotals.異 || 0}</td>
+                <td style="color:#ef4444;">${typeTotals.巨 || 0}</td>
+                <td style="color:#7c3aed;">${typeTotals.流 || 0}</td>
                 <td style="background:#dbeafe; color:#1e40af;">${globalSum}</td>
             `;
             statsBody.appendChild(summaryTr);
@@ -647,13 +673,17 @@
             if(totalPlantedGrids === 0) {
                 statsBody.innerHTML += `<tr><td colspan="7" style="color:#94a3b8; padding: 20px 0;">暫無耕作數據</td></tr>`; return;
             }
+            
             for(let key in statsMap) {
                 const item = statsMap[key]; const sum = item.普 + item.幻 + item.異 + item.巨 + item.流;
                 statsBody.innerHTML += `
                     <tr>
                         <td style="font-weight:bold; color:#1e3a8a; text-align:left; padding-left:6px;">${item.name}(${key})</td>
-                        <td>${item.普 || '-'}</td><td>${item.幻 || '-'}</td><td>${item.異 || '-'}</td>
-                        <td style="color:#ef4444; font-weight:bold;">${item.巨 || '-'}</td><td style="color:#7c3aed; font-weight:bold;">${item.流 || '-'}</td>
+                        <td>${item.普 || '-'}</td>
+                        <td style="color:#1d4ed8; font-weight:bold;">${item.幻 || '-'}</td>
+                        <td style="color:#ea580c; font-weight:bold;">${item.異 || '-'}</td>
+                        <td style="color:#ef4444; font-weight:bold;">${item.巨 || '-'}</td>
+                        <td style="color:#7c3aed; font-weight:bold;">${item.流 || '-'}</td>
                         <td style="font-weight:bold; background:#f8fafc;">${sum}</td>
                     </tr>
                 `;
@@ -718,7 +748,10 @@
                                 else {
                                     if (cropInfo.cat === '至臻') cell.classList.add(`bg-crop-${currentShort}`);
                                     else cell.classList.add(`bg-cat-${cropInfo.cat}`);
+                                    
                                     if(item.style === '巨') cell.classList.add('t-style-巨大');
+                                    else if(item.style === '幻') cell.classList.add('t-style-幻');
+                                    else if(item.style === '異') cell.classList.add('t-style-異');
                                     else cell.classList.add(`t-${cropInfo.cat}`);
                                 }
                             }
@@ -743,6 +776,7 @@
                         if(input) input.value = item.val;
                     });
                 }
+                calculateInvTotals();
                 calculateStats();
             } catch(e) { console.error(e); }
         }
